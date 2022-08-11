@@ -1,0 +1,7 @@
+{
+  "name": "koernig",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
