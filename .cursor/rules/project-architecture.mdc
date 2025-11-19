@@ -1,0 +1,80 @@
+---
+description: Project-specific architecture decisions, patterns, and conventions for the koernig analog film tracker
+globs: ["**/*.ts", "**/*.html"]
+alwaysApply: true
+---
+
+# Project Architecture
+
+This document outlines the architecture decisions and patterns specific to the koernig analog film tracker project.
+
+## Domain Model
+
+The application manages three core entities:
+
+* **Film:** Represents a physical film roll with properties like type, ISO, expiration date, and status
+* **Camera:** Represents a camera with model information and currently loaded film
+* **Film Status:** Tracks the lifecycle: unused → loaded → shot → in-development → developed
+
+## Data Persistence
+
+* **Ionic Storage:** All data persistence goes through Ionic Storage service, not direct database access
+* **Storage Service:** Create a centralized storage service in `libs/mobile/data-access/storage/`
+* **Fallback Chain:** Storage automatically falls back: SQLite → IndexedDB → LocalStorage
+* **No Backend:** The application runs fully locally - no cloud sync in MVP
+
+## State Management
+
+* **NGXS for Complex State:** Use NGXS for application-wide state (films, cameras, relationships)
+* **Signals for Local State:** Use Angular Signals for component-local state
+* **State Structure:** Organize NGXS stores by domain:
+  - `FilmState` - Film inventory and status
+  - `CameraState` - Camera management
+  - `FilmCameraState` - Film-to-camera relationships
+
+## Component Organization
+
+* **Feature-Based:** Organize components by feature/domain, not by type
+* **Page Components:** Use Ionic page components for main views
+* **Shared Components:** Place reusable components in `libs/mobile/ui/` (to be created)
+* **Component Naming:** Use descriptive names: `FilmListComponent`, `CameraDetailPage`, etc.
+
+## Service Layer
+
+* **Domain Services:** Create services for business logic:
+  - `FilmService` - Film CRUD operations
+  - `CameraService` - Camera CRUD operations
+  - `StorageService` - Data persistence abstraction
+* **Service Location:** Place services in `libs/mobile/data-access/services/`
+
+## Models and Types
+
+* **Type Definitions:** Define all interfaces and types in `libs/mobile/models/`
+* **Barrel Exports:** Export from `libs/mobile/models/index.ts`
+* **Immutable Models:** Prefer readonly properties and immutable updates
+
+## Routing
+
+* **Lazy Loading:** All feature routes should be lazy-loaded
+* **Route Organization:** Organize routes by feature in `apps/mobile/src/app/app.routes.ts`
+* **Deep Linking:** Ensure all routes support deep linking for mobile app navigation
+
+## Testing Strategy
+
+* **Unit Tests:** Test services, stores, and utilities with Jest
+* **Component Tests:** Test components with Angular testing utilities
+* **E2E Tests:** Use Playwright for end-to-end testing (future: Testronaut.dev)
+
+## Code Organization
+
+* **Single Responsibility:** Each file should have a single, well-defined purpose
+* **File Naming:** Use kebab-case for file names: `film-list.component.ts`
+* **Barrel Exports:** Use `index.ts` files for clean public APIs
+* **No Business Logic in Components:** Keep components thin, delegate to services/stores
+
+## Future Considerations
+
+* **CLI Tool:** Future CLI tool will be in `apps/cli/`
+* **Shared Utils:** Framework-agnostic utilities in `libs/shared/utils/`
+* **Cloud Sync:** Optional backend for cloud sync (future feature)
+* **Electron App:** Potential desktop app using Electron (future)

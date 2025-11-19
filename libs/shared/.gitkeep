@@ -1,0 +1,4 @@
+# Framework-agnostic shared code
+# Future libraries will be created here:
+# - utils/ (Pure TypeScript utilities)
+

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Koernig Base Config",
+  "extends": [
+    "@tsconfig/strictest/tsconfig.json",
+    "@tsconfig/node22/tsconfig.json"
+  ],
+  "compilerOptions": {
+    /* Required: Override Node.js settings for Angular/Browser environment */
+    "target": "ES2024",
+    "lib": [
+      "ES2024",
+      "ESNext.Array",
+      "ESNext.Collection",
+      "ESNext.Iterator",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    
+    /* Required: Angular decorator support */
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    
+    /* Required: NX monorepo path mappings */
+    "baseUrl": ".",
+    "paths": {},
+    
+    /* Recommended: Project-specific settings */
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "useDefineForClassFields": true
+  },
+  "exclude": ["node_modules", "tmp", "dist", "coverage", ".nx"]
+}

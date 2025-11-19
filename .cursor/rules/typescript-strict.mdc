@@ -1,0 +1,119 @@
+---
+description: TypeScript strict mode configuration and best practices for type safety
+globs: ["**/*.ts"]
+alwaysApply: true
+---
+
+# TypeScript Strict Mode
+
+This project enforces strict TypeScript checking for maximum type safety and code quality.
+
+## Strict Configuration
+
+The project extends from recommended TypeScript base configurations in `tsconfig.base.json`:
+- **`@tsconfig/strictest`** - Provides the strictest possible TypeScript configuration
+- **`@tsconfig/node22`** - Node.js 22 specific settings (adapted for browser/DOM environment)
+
+### Strict Settings (from @tsconfig/strictest)
+
+- `strict: true` - Enables all strict type checking options
+- `allowUnusedLabels: false` - Prevents unused labels
+- `allowUnreachableCode: false` - Prevents unreachable code
+- `exactOptionalPropertyTypes: true` - Stricter optional property types
+- `noFallthroughCasesInSwitch: true` - Prevents fallthrough in switch statements
+- `noImplicitOverride: true` - Requires explicit override keyword
+- `noImplicitReturns: true` - Ensures functions return values
+- `noPropertyAccessFromIndexSignature: true` - Safer property access
+- `noUncheckedIndexedAccess: true` - Safer array/object access
+- `noUnusedLocals: true` - Flags unused local variables
+- `noUnusedParameters: true` - Flags unused parameters
+- `isolatedModules: true` - Ensures each file can be transpiled independently
+
+## Type Safety Rules
+
+* **No `any` Types:** Never use `any` unless absolutely necessary. Prefer `unknown` when the type is uncertain:
+  ```typescript
+  // Bad
+  function process(data: any) { }
+  
+  // Good
+  function process(data: unknown) {
+    if (typeof data === 'string') {
+      // Type narrowed to string
+    }
+  }
+  ```
+
+* **Explicit Return Types:** For public APIs, prefer explicit return types:
+  ```typescript
+  // Good
+  export function getFilm(id: string): Film | null {
+    // ...
+  }
+  ```
+
+* **Type Inference:** Allow TypeScript to infer types when obvious:
+  ```typescript
+  // Good
+  const name = 'Angular'; // inferred as string
+  const count = 42; // inferred as number
+  ```
+
+* **Null Safety:** Always handle null/undefined cases:
+  ```typescript
+  // Good
+  function getFilm(id: string): Film | null {
+    const film = films.find(f => f.id === id);
+    return film ?? null;
+  }
+  ```
+
+* **Index Access:** Use optional chaining and nullish coalescing for safe property access:
+  ```typescript
+  // Good
+  const name = film?.name ?? 'Unknown';
+  const firstItem = items[0] ?? null;
+  ```
+
+## Interface and Type Definitions
+
+* **Interfaces for Objects:** Use interfaces for object shapes:
+  ```typescript
+  export interface Film {
+    id: string;
+    name: string;
+    iso: number;
+  }
+  ```
+
+* **Types for Unions/Intersections:** Use types for unions, intersections, and computed types:
+  ```typescript
+  export type FilmStatus = 'unused' | 'loaded' | 'shot' | 'in-development' | 'developed';
+  export type FilmWithCamera = Film & { camera: Camera };
+  ```
+
+* **Readonly Properties:** Use `readonly` for immutable properties:
+  ```typescript
+  export interface Film {
+    readonly id: string;
+    name: string;
+  }
+  ```
+
+## Generic Types
+
+* **Generic Constraints:** Use generic constraints when appropriate:
+  ```typescript
+  function getById<T extends { id: string }>(items: T[], id: string): T | null {
+    return items.find(item => item.id === id) ?? null;
+  }
+  ```
+
+## Utility Types
+
+* **Use Built-in Utility Types:** Leverage TypeScript utility types:
+  - `Partial<T>` - Make all properties optional
+  - `Required<T>` - Make all properties required
+  - `Pick<T, K>` - Select specific properties
+  - `Omit<T, K>` - Exclude specific properties
+  - `Readonly<T>` - Make all properties readonly

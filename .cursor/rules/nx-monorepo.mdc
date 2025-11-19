@@ -1,0 +1,72 @@
+---
+description: NX monorepo structure, library organization, and dependency management patterns
+globs: ["**/project.json", "**/tsconfig*.json", "nx.json"]
+alwaysApply: false
+---
+
+# NX Monorepo Best Practices
+
+This project uses NX for monorepo management with a structured approach to organizing applications and libraries.
+
+## Project Structure
+
+* **Apps Directory:** All applications go in `apps/` directory (e.g., `apps/mobile/`, `apps/mobile-e2e/`).
+* **Libs Directory:** All libraries go in `libs/` directory, organized by scope:
+  - `libs/mobile/` - Mobile-specific shared code
+  - `libs/shared/` - Framework-agnostic shared code
+* **Nested Organization:** Use nested directories for logical grouping:
+  - `libs/mobile/data-access/` - NGXS stores, actions, services
+  - `libs/mobile/models/` - TypeScript interfaces and types
+  - `libs/shared/utils/` - Pure TypeScript utilities
+
+## Library Creation
+
+* **Use NX Generators:** Always use NX generators to create new libraries:
+  ```bash
+  pnpm nx generate @nx/angular:library [name] --directory=libs/mobile/[name]
+  ```
+* **Library Naming:** Use kebab-case for library names and follow the scope pattern.
+* **Barrel Exports:** Create `index.ts` files for clean public APIs.
+
+## Dependency Management
+
+* **Import Paths:** Use TypeScript path mappings from `tsconfig.base.json` for imports:
+  ```typescript
+  import { Film } from '@koernig/mobile/models';
+  import { FilmState } from '@koernig/mobile/data-access';
+  ```
+* **No Circular Dependencies:** Ensure libraries don't create circular dependencies. Use dependency tags in `nx.json` if needed.
+* **Buildable Libraries:** Mark libraries as buildable when they need to be published or used outside the monorepo.
+
+## TypeScript Configuration
+
+* **Base Config:** All projects extend `tsconfig.base.json` from the workspace root.
+* **Project Configs:** Each project has its own `tsconfig.json` that extends the base.
+* **Path Mappings:** Add path mappings to `tsconfig.base.json` for library imports.
+
+## Testing
+
+* **Unit Tests:** Place unit tests alongside source files: `*.spec.ts`
+* **E2E Tests:** E2E tests are separate applications in `apps/[app]-e2e/`
+* **Test Targets:** Use NX test targets: `pnpm nx test [project]`
+
+## Building
+
+* **Build Targets:** Use NX build targets: `pnpm nx build [project]`
+* **Affected Commands:** Use `nx affected` commands for CI/CD to only build/test what changed.
+* **Build Dependencies:** Configure build dependencies in `project.json` using `dependsOn`.
+
+## Code Generation
+
+* **NX Generators:** Prefer NX generators over manual file creation:
+  - `@nx/angular:component` for components
+  - `@nx/angular:service` for services
+  - `@nx/angular:library` for libraries
+* **Custom Generators:** Create custom generators for project-specific patterns if needed.
+
+## Best Practices
+
+* **Shared Code:** Extract shared code into libraries rather than duplicating.
+* **Library Scope:** Keep libraries focused and single-purpose.
+* **Public API:** Clearly define public APIs through barrel exports (`index.ts`).
+* **Dependency Graph:** Regularly review the dependency graph: `pnpm nx graph`

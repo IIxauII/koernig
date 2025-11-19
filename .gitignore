@@ -1,2 +1,48 @@
+# Dependencies
 node_modules
+
+# Build outputs
+dist
+*.tsbuildinfo
+
+# Test coverage
+coverage
+*.lcov
+
+# NX
 .nx
+.nx/cache
+
+# Angular
+.angular
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Misc
+*.local
+.env.local
+.env.*.local
+
+# Package manager locks (we use pnpm)
+package-lock.json
+yarn.lock
+
+# mise (if lock file is generated)
+mise.lock
