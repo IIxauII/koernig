@@ -1,4 +1,16 @@
+[settings]
+lockfile = true
+experimental = true
+
 [tools]
 node = "24"
 pnpm = "10"
+
+[tasks.install-aikido-safe-chain]
+description = "Install Aikido Safe Chain"
+run = "curl -fsSL https://raw.githubusercontent.com/AikidoSec/safe-chain/main/install-scripts/install-safe-chain.sh | sh"
+
+[tasks.install-ionic]
+description = "Install Ionic CLI globally"
+run = "$HOME/.safe-chain/shims/pnpm install -g @ionic/cli"
 
