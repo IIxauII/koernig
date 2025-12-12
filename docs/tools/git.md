@@ -29,9 +29,9 @@ Write commit messages in imperative mood, as if completing the sentence: "If app
 - `Change VLAN Name For Sales` (unnecessary capitalization)
 - `Fix routing table configuration.` (unnecessary period)
 
-### 3. Commit Type Prefixes (Conventional Commits)
+### 3. Conventional Commits Specification
 
-Use the Conventional Commits specification format: `type(scope): description`
+Follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) specification for commit messages.
 
 **Format Structure:**
 ```
@@ -45,43 +45,63 @@ Use the Conventional Commits specification format: `type(scope): description`
 **Commit Types:**
 
 The specification requires two types that correlate with Semantic Versioning:
-- **feat** - New feature (correlates with MINOR version bump)
-- **fix** - Bug fix (correlates with PATCH version bump)
+- **feat** - A commit of type `feat` introduces a new feature to the codebase (correlates with MINOR in Semantic Versioning)
+- **fix** - A commit of type `fix` patches a bug in your codebase (correlates with PATCH in Semantic Versioning)
 
-Additional recommended types (based on Angular convention):
+Additional types are allowed but not mandated by the specification. The Angular convention recommends:
+- **build** - Build system or dependency changes
+- **chore** - Maintenance tasks
+- **ci** - CI/CD configuration changes
 - **docs** - Documentation changes
-- **style** - Code style/formatting changes (whitespace, semicolons, etc.)
-- **refactor** - Code refactoring (neither fix nor feature)
+- **style** - Code style/formatting changes
+- **refactor** - Code refactoring
 - **perf** - Performance improvements
 - **test** - Adding or updating tests
-- **build** - Build system or dependency changes
-- **ci** - CI/CD configuration changes
-- **chore** - Maintenance tasks (other changes that don't modify src or test files)
-- **revert** - Revert a previous commit
+
+Additional types have no implicit effect in Semantic Versioning (unless they include a BREAKING CHANGE).
 
 **Format Rules:**
-- Use lowercase for types (consistency recommended)
-- Optional scope in parentheses - a noun describing a section of the codebase (e.g., `feat(auth):`, `fix(router):`)
-- Use colon and space after type/scope prefix
-- Description must immediately follow the colon and space
-- Optional body may be provided after a blank line
-- Optional footers may be provided after the body
+1. Commits MUST be prefixed with a type, followed by OPTIONAL scope, OPTIONAL `!`, and REQUIRED colon and space
+2. A scope MAY be provided after a type. A scope MUST consist of a noun describing a section of the codebase surrounded by parentheses, e.g., `feat(parser):`
+3. A description MUST immediately follow the colon and space after the type/scope prefix
+4. A longer commit body MAY be provided after the short description, beginning one blank line after the description
+5. One or more footers MAY be provided one blank line after the body
+6. The units of information that make up Conventional Commits MUST NOT be treated as case sensitive by implementors, with the exception of BREAKING CHANGE which MUST be uppercase
+
+**Note on Casing:** Any casing may be used for types and descriptions, but it's best to be consistent. The specification examples use lowercase for descriptions.
 
 **Breaking Changes:**
-Breaking changes correlate with MAJOR version bump and can be indicated in two ways:
-1. Append `!` after the type/scope: `feat!:` or `feat(api)!:`
-2. Include `BREAKING CHANGE:` in the footer section
+
+A BREAKING CHANGE correlates with MAJOR in Semantic Versioning and can be part of commits of any type. Breaking changes MUST be indicated in one of two ways:
+
+1. **In the type/scope prefix:** Append `!` immediately before the `:`. If `!` is used, `BREAKING CHANGE:` MAY be omitted from the footer section
+2. **In the footer:** Include `BREAKING CHANGE:` followed by a colon, space, and description
 
 **Examples:**
-- `feat: Add new site-to-site VPN`
-- `feat(auth): Add OAuth2 support`
-- `fix: Resolve authentication timeout issue`
-- `fix(router): Handle navigation errors`
-- `docs: Update API documentation`
-- `chore: Remove build artifacts from git tracking`
-- `feat!: Change API response format` (breaking change with `!`)
-- `feat(api)!: send an email to the customer when a product is shipped` (breaking change with scope)
-- `chore!: drop support for Node 6` (breaking change in chore type)
+
+From the Conventional Commits specification:
+
+- `feat: allow provided config object to extend other configs`
+- `feat!: send an email to the customer when a product is shipped`
+- `feat(api)!: send an email to the customer when a product is shipped`
+- `chore!: drop support for Node 6`
+- `docs: correct spelling of CHANGELOG`
+- `feat(lang): add Polish language`
+- `fix: prevent racing of requests`
+
+Example with BREAKING CHANGE footer:
+```
+feat: allow provided config object to extend other configs
+
+BREAKING CHANGE: `extends` key in config file is now used for extending other config files
+```
+
+Example with both `!` and BREAKING CHANGE footer:
+```
+chore!: drop support for Node 6
+
+BREAKING CHANGE: use JavaScript features not available in Node 6.
+```
 
 ## Reference
 
