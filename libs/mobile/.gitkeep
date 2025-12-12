@@ -1,5 +1,0 @@
-# Mobile-specific shared libraries
-# Future libraries will be created here:
-# - data-access/ (NGXS stores, actions, Ionic Storage service)
-# - models/ (TypeScript interfaces and types)
-
