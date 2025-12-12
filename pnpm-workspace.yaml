@@ -1,0 +1,10 @@
+# Enforce minimum package age of 7 days (10,080 minutes)
+# This prevents installing packages published within the last 7 days
+# Introduced in pnpm 10.16+
+minimumReleaseAge: 10080
+
+# Optional: Exclude specific packages from the age restriction
+# minimumReleaseAgeExclude:
+#   - package-name-1
+#   - package-name-2
+

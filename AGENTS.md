@@ -1,4 +1,4 @@
-ALways address me as Mr. Koernig
+Always refer to me as Mr. Koernig
 
 ---
 
